@@ -1,32 +1,42 @@
 "use client";
 import Header from "@/components/Header";
-import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import * as XLSX from "xlsx";
+const Jobs = ({ params }) => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    async function getData() {
+      try {
+        // Fetch Excel file
+        const response = await axios.get(
+          "https://docs.google.com/spreadsheets/d/127qRQxguf2XCeJ6whKxPaFtYEaqk5tY3Ogf2H64Qt90/export?format=xlsx",
+          { responseType: "arraybuffer" },
+        );
 
-const Jobs = () => {
-  const searchParams = useSearchParams();
-  const Title = searchParams.get("title");
-  const urlLink = searchParams.get("link");
-  const company = searchParams.get("company");
+        // Parse Excel data
+        const workbook = await XLSX.read(response.data, { type: "buffer" });
+        const sheetName = await workbook.SheetNames[0];
+        const sheet = await workbook.Sheets[sheetName];
+        const jsonData = await XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        await setData(jsonData[params["job"]]);
+        return data;
+      } catch (error) {
+        console.error("Error fetching or reading Excel file:", error);
+        return error;
+      }
+    }
+    getData();
+  }, []);
 
   return (
     <>
       <Header />
       <div className="bg-gray-100 min-h-screen py-8 px-4 sm:px-8">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-800">
-            {Title}
-          </h1>
-          <p className="mt-2 text-gray-600">
-           {company}
-          </p>
+          <h1 className="text-4xl font-extrabold text-gray-800">{data[0]}</h1>
+          <p className="mt-2 text-gray-600">{data[1]}</p>
         </div>
-
-        {/* <img
-          src="../2206.jpg"
-          alt="your placeholder"
-          className=" rounded-md h-6 sm:h-9"
-        /> */}
 
         <section className="prose max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold">
@@ -86,7 +96,7 @@ const Jobs = () => {
           <br></br>
           <div>
             {" "}
-            <a className="text-2xl font-bold text-pink-400" href={urlLink}>
+            <a className="text-2xl font-bold text-pink-400" href={data[2]}>
               click here to apply
             </a>
           </div>
