@@ -1,9 +1,47 @@
 "use client";
 import Header from "@/components/Header";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import * as XLSX from 'xlsx';
 
 const Jobs = () => {
+  const[fifthRowData, setFifthRowData] = useState(null);
+
+  let ramramji = []
+  async function getServerSideProps(context) {
+      try {
+        // Fetch Excel file
+        const response = await axios.get('https://docs.google.com/spreadsheets/d/127qRQxguf2XCeJ6whKxPaFtYEaqk5tY3Ogf2H64Qt90/export?format=xlsx', { responseType: 'arraybuffer' });
+        
+        // Parse Excel data
+        const workbook = XLSX.read(response.data, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    
+        // Get the 5th row (index 4)
+        ramramji = jsonData[4];
+        //console.log(ramramji);
+    
+        return ramramji;
+      } catch (error) {
+        console.error('Error fetching or reading Excel file:', error);
+        return [];
+      }
+    }
+
+  useEffect(() => {
+    setFifthRowData(getServerSideProps());
+  },[]);
+
+
+  //getServerSideProps()
+
+
+  // console.log(company_data);
+  console.log(fifthRowData);
+  console.log(ramramji);
   const searchParams = useSearchParams();
   const Title = searchParams.get("title");
   const urlLink = searchParams.get("link");
@@ -15,10 +53,10 @@ const Jobs = () => {
       <div className="bg-gray-100 min-h-screen py-8 px-4 sm:px-8">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-extrabold text-gray-800">
-            {Title}
+            {ramramji[0]}
           </h1>
           <p className="mt-2 text-gray-600">
-           {company}
+           {ramramji[1]}
           </p>
         </div>
 
