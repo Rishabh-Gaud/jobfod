@@ -27,7 +27,7 @@ const Jobs = ({ params }) => {
       }
     }
     getData();
-  }, []);
+  }, [data, params]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const SpreadsheetPage = ({ rowData }) => {
   return (
@@ -14,7 +14,5 @@ const SpreadsheetPage = ({ rowData }) => {
     </div>
   );
 };
-
-getServerSideProps()
 
 export default SpreadsheetPage;
