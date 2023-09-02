@@ -62,9 +62,15 @@ const DetailForm = () => {
           className="bg-gray-400 ml-2"
         >
           <option value="">Select</option>
-          <option value="Maths">Maths</option>
-          <option value="Chemistry">Chemistry</option>
-          <option value="Physics">Physics</option>
+          <option value="cpp">cpp</option>
+          <option value="sriram">test</option>
+          <option value="cprogramming">c programming</option>
+          <option value="arithmaticaptitude">arithmatic aptitude</option>
+          <option value="datainterpretation">data interpretation</option>
+          <option value="logicalreasoning">logical reasoning</option>
+          <option value="nonverbalreasoning">non verbal reasoning</option>
+          <option value="verbalreasoning">verbal reasoning</option>
+          <option value="verbalability">verbal ability</option>
         </select>
       </div>
       <div className={`${classes.form__group}`}>

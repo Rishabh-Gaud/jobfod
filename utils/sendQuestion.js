@@ -6,8 +6,19 @@ export const sendQuestion = async (formData) => {
     const data = {...rest, option: [...option]};
     const key = formData['subject'];
     const finalData = {data, key}
+    const newformdata = {
+        data:{
+            category:formData.category,
+            explanation:formData.explanation,
+            description:formData.description,
+            correct:formData.answer,
+            options:option
+        },
+        key:key
+    }
     console.log("data >>>>>>>>>>>>>>>>", finalData);
-    const question = await axios.post('localhost:8082/mcq', finalData);
+    console.log(newformdata);
+    const question = await axios.post('http://localhost:8082/mcq', newformdata);
     return question;
   } catch (error) {
     throw error;
