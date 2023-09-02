@@ -18,7 +18,7 @@ export const sendQuestion = async (formData) => {
     }
     console.log("data >>>>>>>>>>>>>>>>", finalData);
     console.log(newformdata);
-    const question = await axios.post('localhost:8082/mcq', newformdata);
+    const question = await axios.post('http://localhost:8082/mcq', newformdata);
     return question;
   } catch (error) {
     throw error;
